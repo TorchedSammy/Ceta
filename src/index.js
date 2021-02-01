@@ -24,7 +24,7 @@ const infotexts = [
 const menu = blessed.list({
 	parent: screen,
 	top: `75%-${menuItems.length}`,
-	left: `50%-9`,
+	left: `50%-10`,
 	width: '15%',
 	keys: true,
 	mouse: true,
