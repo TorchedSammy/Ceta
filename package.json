@@ -1,0 +1,26 @@
+{
+  "name": "ceta",
+  "version": "0.0.1",
+  "description": "🐋 Command line Stardew Valley mod manager.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TorchedSammy/Ceta.git"
+  },
+  "keywords": [
+    "smapi",
+    "stardew-valley"
+  ],
+  "author": "TorchedSammy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TorchedSammy/Ceta/issues"
+  },
+  "homepage": "https://github.com/TorchedSammy/Ceta#readme",
+  "dependencies": {
+    "blessed": "git+https://github.com/Hilbis/blessed.git"
+  }
+}
