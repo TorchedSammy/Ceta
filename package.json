@@ -1,6 +1,6 @@
 {
   "name": "ceta",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "🐋 Command line Stardew Valley mod manager.",
   "main": "src/index.js",
   "scripts": {

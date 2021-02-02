@@ -24,7 +24,7 @@ const infotexts = [
 const menu = blessed.list({
 	parent: screen,
 	top: `75%-${menuItems.length}`,
-	left: `50%-10`,
+	left: `center`,
 	width: '15%',
 	keys: true,
 	mouse: true,
@@ -51,22 +51,22 @@ const menu = blessed.list({
 
 const name = blessed.text({
 	parent: screen,
-	top: 18,
-	left: '50%',
+	top: 17,
+	left: 'center',
 	content: 'Ceta'
 });
 
 const version = blessed.text({
 	parent: screen,
-	top: 19,
-	left: '50%-5',
+	top: 18,
+	left: 'center',
 	content: `Version ${ceta.util.version}`
 });
 
-blessed.ansiimage({
+const whale = blessed.ansiimage({
 	parent: screen,
-	top: 2,
-	left: `50%-13`,
+	top: 1,
+	left: `center`,
 	file: 'whale.png',
 	width: 25,
 	height:  15
@@ -80,12 +80,61 @@ const infotext = blessed.text({
 	align: 'center'
 });
 
+const aboutscreen = blessed.box({
+	parent: screen,
+	left: 'center',
+	hidden: true,
+	width: '25%',
+	border: {
+		type: 'line'
+	},
+	style: {
+		border: {
+			fg: 'cyan'
+		}
+	}
+});
+const abouttext = blessed.text({
+	parent: aboutscreen,
+	top: '40%',
+	left: 'center',
+	width: '90%',
+	content: `
+Ceta v${ceta.util.version}
+Command line Stardew Valley mod manager.
+
+Scanned Mods: N/A
+
+~~~~~~~~~~~~~~~~~~
+Created by: TorchedSammy
+(https://sammy.is-a.dev)
+	`,
+	align: 'center'
+});
+
 menu.on('highlight', (_, n) => {
 	infotext.setContent(ceta.util.infoText(infotexts[n]))
 });
+menu.on('select', (i) => {
+	switch(i.content) {
+		case 'About':
+			aboutscreen.append(whale);
+			aboutscreen.show();
+			screen.render()
+			break;
+		case 'Exit':
+			process.exit();
+			break;
+	}
+})
 
 screen.key(['C-c'], () => {
 	process.exit();
+});
+screen.key(['escape'], () => {
+	screen.append(whale);
+	aboutscreen.hide();
+	screen.render()
 });
 
 screen.render();
