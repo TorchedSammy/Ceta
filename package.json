@@ -1,6 +1,6 @@
 {
   "name": "ceta",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "🐋 Command line Stardew Valley mod manager.",
   "main": "src/index.js",
   "scripts": {
@@ -21,6 +21,8 @@
   },
   "homepage": "https://github.com/TorchedSammy/Ceta#readme",
   "dependencies": {
-    "blessed": "git+https://github.com/Hilbis/blessed.git"
+    "blessed": "git+https://github.com/Hilbis/blessed.git",
+    "glob": "^7.1.6",
+    "json5": "^2.2.0"
   }
 }

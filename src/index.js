@@ -1,5 +1,10 @@
 const blessed = require('blessed');
 const ceta = require('../lib');
+const fs = require('fs');
+const cfgdir = new ceta.ConfigDir('Ceta', 'settings.json');
+
+if (!cfgdir.exists()) fs.mkdirSync(cfgdir.platformPath());
+if (!cfgdir.configExists()) fs.writeFileSync(cfgdir.configPath(), JSON.stringify(require('../defaultSettings'), null, 4));
 
 const screen = blessed.screen({
   smartCSR: true,
@@ -10,6 +15,7 @@ const menuItems = [
 	"Manage Mods",
 	"Download SMAPI",
 	"Check for Updates",
+	"Options",
 	"About",
 	"Exit"
 ];
@@ -17,6 +23,7 @@ const infotexts = [
 	'Opens the menu to manage Stardew Valley mods.',
 	'Downloads the latest version of SMAPI and runs the installer.',
 	'Checks if a new version has been published.',
+	'Configure Ceta\'s settings.',
 	'Shows info about the running version of Ceta.',
 	'Exits Ceta.'
 ];
@@ -31,21 +38,12 @@ const menu = blessed.list({
 	items: menuItems,
 	align: 'center',
 	style: {
-		fg: 'blue',
+		fg: 'cyan',
 		selected: {
-			bg: 'blue',
+			bg: 'cyan',
 			fg: 'white'
 		},
-		bold: true,
-		scrollbar: {
-			bg: 'blue'
-		},
-		focus: {
-			bg: 'red'
-		},
-		hover: {
-			bg: 'red'
-		}
+		bold: true
 	}
 });
 
@@ -86,12 +84,8 @@ const aboutscreen = blessed.box({
 	hidden: true,
 	width: '25%',
 	border: {
-		type: 'line'
-	},
-	style: {
-		border: {
-			fg: 'cyan'
-		}
+		type: 'line',
+		fg: 'cyan'
 	}
 });
 const abouttext = blessed.text({
@@ -117,6 +111,9 @@ menu.on('highlight', (_, n) => {
 });
 menu.on('select', (i) => {
 	switch(i.content) {
+		case 'Manage Mods':
+			require('./menus/manager');
+			screen.destroy()
 		case 'About':
 			aboutscreen.append(whale);
 			aboutscreen.show();
