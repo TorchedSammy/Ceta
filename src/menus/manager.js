@@ -75,7 +75,7 @@ modlist.focus();
 
 screen.render();
 
-glob(path.resolve(`${ceta.util.gameDir.replace(/^\\/, '/')}/Mods/**/*/manifest.json`), {strict: false, silent: true, nodir: true}, (err, paths) => {
+glob(path.resolve(`${ceta.util.gameDir.replace(/^\\/, '/')}/Mods/**/{,.}*[!.]/manifest.json`), {strict: false, silent: true, nodir: true}, (err, paths) => {
 	for (let manifestpath of paths) {
 		const manifestfile = fs.readFileSync(manifestpath, 'utf8');
 		const manifest = json5.parse(manifestfile)
