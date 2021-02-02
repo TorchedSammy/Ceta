@@ -1,0 +1,6 @@
+- [ ] Mod Updating 
+- [ ] Find and install dependencies of mods
+- [ ] Launch with different modpacks
+- [ ] Export list of enabled mods
+- [ ] Upload log to https://smapi.io/log
+- [ ] XNB Mod Managing
