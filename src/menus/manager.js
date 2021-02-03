@@ -8,7 +8,8 @@ const scannedMods = new Map();
 
 const screen = blessed.screen({
   smartCSR: true,
-  title: 'Ceta - Manager'
+  title: 'Ceta - Manager',
+  debug: true
 });
 
 const modlist = blessed.list({
@@ -46,7 +47,6 @@ const modsetbtn = blessed.button({
 	shrink: true,
 	keys: true,
 	mouse: true,
-	name: 'modsets',
 	content: '[ Modsets ]',
 	style: {
 		fg: 'cyan',
@@ -57,19 +57,110 @@ const modsetbtn = blessed.button({
 	}
 });
 
-modsetbtn.on('press', () => {
-	
+const singlemanage = blessed.box({
+	parent: screen,
+	left: 'center',
+	top: 'center',
+	width: '50%',
+	height: '32%',
+	keys: true,
+	mouse: true,
+	hidden: true,
+	style: {
+		fg: 'cyan'
+	},
+	border: {
+		type: 'line',
+		fg: 'cyan'
+	}
 });
 
-/*scanbutton.on('press', () => {
+const togglebtn = blessed.button({
+	parent: singlemanage,
+	top: '74%',
+	left: '2%',
+	width: '14%',
+	shrink: true,
+	keys: true,
+	mouse: true,
+	content: '[ Disable ]',
+	style: {
+		fg: 'cyan',
+		focus: {
+			fg: 'cyan',
+			bg: 'white'
+		}
+	}
+});
+
+modsetbtn.on('press', () => {
 	// TODO
-});*/
+});
+togglebtn.on('press', () => {
+	togglebtn.setContent(togglebtn.content === '[ Enable ]' ? '[ Disable ]' : '[ Enable ]');
+});
+
+modlist.on('select', (i) => {
+	const mod = [...scannedMods].find(([_, m]) => m.name === i.content.replace('[-] ', ''))[1];
+	singlemanage.setText(`
+${mod.name}:
+${mod.description}
+
+Version: ${mod.version}
+`)
+
+	togglebtn.focus()
+	togglebtn.setContent(!mod.disabled ? '[ Disable ]' : '[ Enable ]');
+	singlemanage.toggle()
+	screen.render()
+});
 
 screen.key(['C-c'], () => {
 	process.exit();
 });
 screen.key(['tab'], () => {
-	modlist.focused ? modsetbtn.focus() : modlist.focus();
+	if (!singlemanage.focused) modlist.focused ? modsetbtn.focus() : modlist.focus();
+});
+screen.key(['escape'], () => {
+	let key;
+	if (!singlemanage.hidden) {
+		screen.debug('pre')
+		const mod = [...scannedMods].find(([k, m]) => {
+			key = k;
+			return m.name === modlist.items[modlist.selected].content.replace('[-] ', '');
+		})[1];
+		const modmap = scannedMods.get(key);
+		const btndisabled = togglebtn.content === '[ Enable ]' ? false : true;
+		if (btndisabled && !mod.disabled && !mod.folderName.startsWith('.')) {
+			try {
+			fs.renameSync(mod.path, path.join(path.join(ceta.util.gameDir, 'Mods'), `.${mod.folderName}`));
+			modlist.items[modlist.selected].content = `[-] ${modlist.items[modlist.selected].content}`;
+			modmap.path = path.join(path.join(ceta.util.gameDir, 'Mods'), `.${mod.folderName}`);
+			mod.folderName = `.${mod.folderName}`;
+			modmap.disabled = true
+		} catch(e) {
+			screen.debug(e.message)
+		}
+			
+			screen.debug('disabling')
+		}
+		if (!btndisabled && mod.disabled && mod.folderName.startsWith('.')) {
+			try {
+			fs.renameSync(mod.path, path.join(path.join(ceta.util.gameDir, 'Mods'), mod.folderName.slice(1)));
+			modlist.items[modlist.selected].content = modlist.items[modlist.selected].content.slice(4);
+			modmap.path = path.join(path.join(ceta.util.gameDir, 'Mods'), mod.folderName)
+			mod.folderName = mod.folderName.slice(1);
+			modmap.disabled = false
+			} catch(e) {
+			screen.debug(e.message)
+		}
+			screen.debug('enabling')
+		}
+	}
+
+	singlemanage.hide();
+	modlist.focus();
+	screen.render();
 });
 modlist.focus();
 
@@ -77,14 +168,22 @@ screen.render();
 
 glob(path.resolve(`${ceta.util.gameDir.replace(/^\\/, '/')}/Mods/**/{,.}*[!.]/manifest.json`), {strict: false, silent: true, nodir: true}, (err, paths) => {
 	for (let manifestpath of paths) {
+		const regex = /^(.*[\\\/])(.*)$/;
+		const match = regex.exec(manifestpath);
+		const modfolder = regex.exec(match[1].substring(0, match[1].length -1))[2]
+
 		const manifestfile = fs.readFileSync(manifestpath, 'utf8');
 		const manifest = json5.parse(manifestfile)
+
 		scannedMods.set(manifest.UniqueID, {
 			name: manifest.Name,
 			version: manifest.Version,
-			description: manifest.Description
+			description: manifest.Description,
+			disabled: modfolder.startsWith('.') ? true : false,
+			path: match[1],
+			folderName: modfolder
 		});
-		modlist.add(manifest.Name)		
+		modlist.add(`${scannedMods.get(manifest.UniqueID).disabled ? '[-] ' : ''}${manifest.Name}`)		
 	}
 	screen.render()
 });
