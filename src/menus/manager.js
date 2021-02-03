@@ -40,18 +40,26 @@ const modlist = blessed.list({
 	}
 });
 
-const modsetbtn = blessed.button({
+const btns = blessed.listbar({
 	parent: screen,
 	top: '97%',
-	width: '7%',
+	width: '100%',
 	left: '1%',
 	shrink: true,
 	keys: true,
 	mouse: true,
-	content: '[ Modsets ]',
+	items: {
+		' Rescan': {callback: () => {
+			modlist.clearItems();
+			screen.render()
+			scan()
+		}}
+	},
 	style: {
-		fg: 'cyan',
-		focus: {
+		item: {
+			fg: 'cyan'
+		},
+		selected: {
 			bg: 'cyan',
 			fg: 'white'
 		}
@@ -94,9 +102,6 @@ const togglebtn = blessed.button({
 	}
 });
 
-modsetbtn.on('press', () => {
-	// TODO
-});
 togglebtn.on('press', () => {
 	togglebtn.setContent(togglebtn.content === '[ Enable ]' ? '[ Disable ]' : '[ Enable ]');
 });
@@ -120,7 +125,7 @@ screen.key(['C-c'], () => {
 	process.exit();
 });
 screen.key(['tab'], () => {
-	if (!singlemanage.focused) modlist.focused ? modsetbtn.focus() : modlist.focus();
+	if (!singlemanage.focused) modlist.focused ? btns.focus() : modlist.focus();
 });
 screen.key(['escape'], () => {
 	let key;
@@ -131,7 +136,7 @@ screen.key(['escape'], () => {
 			return m.name === modlist.items[modlist.selected].content.replace('[-] ', '');
 		})[1];
 		const modmap = scannedMods.get(key);
-		const btndisabled = togglebtn.content === '[ Enable ]' ? false : true;
+		const btndisabled = togglebtn.content === '[ Enable ]' ? true : false;
 		if (btndisabled && !mod.disabled && !mod.folderName.startsWith('.')) {
 			try {
 			fs.renameSync(mod.path, path.join(path.join(ceta.util.gameDir, 'Mods'), `.${mod.folderName}`));
@@ -167,25 +172,28 @@ screen.key(['escape'], () => {
 modlist.focus();
 
 screen.render();
+scan();
 
-glob(path.resolve(`${ceta.util.gameDir.replace(/^\\/, '/')}/Mods/**/{,.}*[!.]/manifest.json`), {strict: false, silent: true, nodir: true}, (err, paths) => {
-	for (let manifestpath of paths) {
-		const regex = /^(.*[\\\/])(.*)$/;
-		const match = regex.exec(manifestpath);
-		const modfolder = regex.exec(match[1].substring(0, match[1].length -1))[2]
+function scan() {
+	glob(path.resolve(`${ceta.util.gameDir.replace(/^\\/, '/')}/Mods/**/{,.}*[!.]/manifest.json`), {strict: false, silent: true, nodir: true}, (err, paths) => {
+		for (let manifestpath of paths) {
+			const regex = /^(.*[\\\/])(.*)$/;
+			const match = regex.exec(manifestpath);
+			const modfolder = regex.exec(match[1].substring(0, match[1].length -1))[2]
 
-		const manifestfile = fs.readFileSync(manifestpath, 'utf8');
-		const manifest = json5.parse(manifestfile)
+			const manifestfile = fs.readFileSync(manifestpath, 'utf8');
+			const manifest = json5.parse(manifestfile)
 
-		scannedMods.set(manifest.UniqueID, {
-			name: manifest.Name,
-			version: manifest.Version,
-			description: manifest.Description,
-			disabled: modfolder.startsWith('.') ? true : false,
-			path: match[1],
-			folderName: modfolder
-		});
-		modlist.add(`${scannedMods.get(manifest.UniqueID).disabled ? '[-] ' : ''}${manifest.Name}`)		
-	}
-	screen.render()
-});
+			scannedMods.set(manifest.UniqueID, {
+				name: manifest.Name,
+				version: manifest.Version,
+				description: manifest.Description,
+				disabled: modfolder.startsWith('.') ? true : false,
+				path: match[1],
+				folderName: modfolder
+			});
+			modlist.add(`${scannedMods.get(manifest.UniqueID).disabled ? '[-] ' : ''}${manifest.Name}`)		
+		}
+		screen.render()
+	});
+}
