@@ -3,6 +3,7 @@ const glob = require('glob');
 const path = require('path');
 const fs = require('fs');
 const json5 = require('json5');
+const cp = require('child_process');
 const ceta = require('../../lib');
 const scannedMods = new Map();
 
@@ -134,9 +135,10 @@ screen.key(['escape'], () => {
 		if (btndisabled && !mod.disabled && !mod.folderName.startsWith('.')) {
 			try {
 			fs.renameSync(mod.path, path.join(path.join(ceta.util.gameDir, 'Mods'), `.${mod.folderName}`));
+
 			modlist.items[modlist.selected].content = `[-] ${modlist.items[modlist.selected].content}`;
-			modmap.path = path.join(path.join(ceta.util.gameDir, 'Mods'), `.${mod.folderName}`);
-			mod.folderName = `.${mod.folderName}`;
+			modmap.folderName = `.${mod.folderName}`;
+			modmap.path = path.join(path.join(ceta.util.gameDir, 'Mods'), mod.folderName);
 			modmap.disabled = true
 		} catch(e) {
 			screen.debug(e.message)
@@ -148,8 +150,8 @@ screen.key(['escape'], () => {
 			try {
 			fs.renameSync(mod.path, path.join(path.join(ceta.util.gameDir, 'Mods'), mod.folderName.slice(1)));
 			modlist.items[modlist.selected].content = modlist.items[modlist.selected].content.slice(4);
+			modmap.folderName = mod.folderName.slice(1);
 			modmap.path = path.join(path.join(ceta.util.gameDir, 'Mods'), mod.folderName)
-			mod.folderName = mod.folderName.slice(1);
 			modmap.disabled = false
 			} catch(e) {
 			screen.debug(e.message)
