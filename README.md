@@ -23,5 +23,9 @@ Features (Future and Now):
 2. `npm install`
 3. `node .` or `ceta` to run.
 
+# Config
+Ceta has some configurable options that you may want to change.  
+It's located in `%APPDATA%\Ceta` on Windows, and `~/.config/Ceta`.
+
 # License 
 MIT
