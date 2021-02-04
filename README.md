@@ -25,7 +25,6 @@ Features (Future and Now):
 
 # Config
 Ceta has some configurable options that you may want to change.  
-It's located in `%APPDATA%\Ceta` on Windows, and `~/.config/Ceta`.
-
+It's located in `%APPDATA%\Ceta` on Windows, and `~/.config/Ceta` on Linux.
 # License 
 MIT
