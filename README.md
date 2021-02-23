@@ -14,6 +14,7 @@ Features (Future and Now):
 # Screenshots
 <img src='https://modeus.is-inside.me/idJTvaeX.png' width='512'>
 <img src='https://modeus.is-inside.me/W2elqPbm.png' width='512'>
+<img src='https://modeus.is-inside.me/3Id9hJ2T.png' width='512'>
 
 # Getting Started
 > ⚠ Ceta is currently in an alpha state. I take no responsiblity if anything happens to your mods.
@@ -29,7 +30,7 @@ a terminal. Note that **Ceta is not tested on MacOS.**
 
 ## Steps
 1. Open a terminal and run `git clone https://github.com/TorchedSammy/Ceta` then
-`cd Ceta`. 
+`cd Ceta`.
 If you downloaded Ceta as zip you don't have to `git clone`, just extract
 and navigate to the extracted folder.
 2. `npm install`
