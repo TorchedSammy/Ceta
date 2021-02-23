@@ -5,5 +5,5 @@ const path = require('path')
 module.exports = {
 	modsetPath: path.join(cfgdir.platformPath(), 'Modsets'),
 	nexusKey: 'NEXUS_API_KEY_HERE',
-	gameDirectory: ceta.util.gameDir()
+	gameDirectory: ceta.util.gameDir
 }
