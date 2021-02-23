@@ -6,5 +6,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Parse `~` when scanning for mods.
+- Parse `~` when scanning and toggling mods.
 - Placeholder description in case a mod doesn't have one (#5)
