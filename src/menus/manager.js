@@ -6,6 +6,7 @@ const json5 = require('json5');
 const cp = require('child_process');
 const ceta = require('../../lib');
 const scannedMods = new Map();
+const gameDir = ceta.util.gameDir.replace('~',require('os').homedir())
 
 const screen = blessed.screen({
   smartCSR: true,
@@ -139,11 +140,11 @@ screen.key(['escape'], () => {
 		const btndisabled = togglebtn.content === '[ Enable ]' ? true : false;
 		if (btndisabled && !mod.disabled && !mod.folderName.startsWith('.')) {
 			try {
-			fs.renameSync(mod.path, path.join(path.join(ceta.util.gameDir, 'Mods'), `.${mod.folderName}`));
+			fs.renameSync(mod.path, path.join(path.join(gameDir, 'Mods'), `.${mod.folderName}`));
 
 			modlist.items[modlist.selected].content = `[-] ${modlist.items[modlist.selected].content}`;
 			modmap.folderName = `.${mod.folderName}`;
-			modmap.path = path.join(path.join(ceta.util.gameDir, 'Mods'), mod.folderName);
+			modmap.path = path.join(path.join(gameDir, 'Mods'), mod.folderName);
 			modmap.disabled = true
 		} catch(e) {
 			screen.debug(e.message)
@@ -153,10 +154,10 @@ screen.key(['escape'], () => {
 		}
 		if (!btndisabled && mod.disabled && mod.folderName.startsWith('.')) {
 			try {
-			fs.renameSync(mod.path, path.join(path.join(ceta.util.gameDir, 'Mods'), mod.folderName.slice(1)));
+			fs.renameSync(mod.path, path.join(path.join(gameDir, 'Mods'), mod.folderName.slice(1)));
 			modlist.items[modlist.selected].content = modlist.items[modlist.selected].content.slice(4);
 			modmap.folderName = mod.folderName.slice(1);
-			modmap.path = path.join(path.join(ceta.util.gameDir, 'Mods'), mod.folderName)
+			modmap.path = path.join(path.join(gameDir, 'Mods'), mod.folderName)
 			modmap.disabled = false
 			} catch(e) {
 			screen.debug(e.message)
@@ -175,7 +176,7 @@ screen.render();
 scan();
 
 function scan() {
-	glob(path.resolve(`${ceta.util.gameDir.replace(/^\\/, '/').replace('~', process.env.HOME)}/Mods/**/{,.}*[!.]/manifest.json`), {strict: false, silent: true, nodir: true}, (err, paths) => {
+	glob(path.resolve(`${gameDir.replace(/^\\/, '/')}/Mods/**/{,.}*[!.]/manifest.json`), {strict: false, silent: true, nodir: true}, (err, paths) => {
 		for (let manifestpath of paths) {
 			const regex = /^(.*[\\\/])(.*)$/;
 			const match = regex.exec(manifestpath);
