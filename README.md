@@ -11,6 +11,10 @@ Features (Future and Now):
 - Download the latest version of SMAPI
 - Launch with different sets of mods
 
+# Screenshots
+<img src='https://modeus.is-inside.me/idJTvaeX.png' width='512'>
+<img src='https://modeus.is-inside.me/W2elqPbm.png' width='512'>
+
 # Getting Started
 > ⚠ Ceta is currently in an alpha state. I take no responsiblity if anything happens to your mods.
 
