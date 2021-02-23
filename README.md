@@ -28,9 +28,10 @@ a terminal. Note that **Ceta is not tested on MacOS.**
   downloaded as a zip [here](https://github.com/TorchedSammy/Ceta/archive/master.zip))
 
 ## Steps
-1. Open a terminal and run `git clone https://github.com/TorchedSammy/Ceta` then `cd Ceta`
-  - If you downloaded Ceta as zip you don't have to `git clone`, just extract
-  - and navigate to the extracted folder.
+1. Open a terminal and run `git clone https://github.com/TorchedSammy/Ceta` then
+`cd Ceta`. 
+If you downloaded Ceta as zip you don't have to `git clone`, just extract
+and navigate to the extracted folder.
 2. `npm install`
 3. `node .` to run.
 
