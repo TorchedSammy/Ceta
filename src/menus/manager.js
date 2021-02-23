@@ -110,7 +110,7 @@ modlist.on('select', (i) => {
 	const mod = [...scannedMods].find(([_, m]) => m.name === i.content.replace('[-] ', ''))[1];
 	singlemanage.setText(`
 ${mod.name}:
-${mod.description}
+${mod.description || 'No Description.'}
 
 Version: ${mod.version}
 `)
@@ -148,7 +148,7 @@ screen.key(['escape'], () => {
 		} catch(e) {
 			screen.debug(e.message)
 		}
-			
+
 			screen.debug('disabling')
 		}
 		if (!btndisabled && mod.disabled && mod.folderName.startsWith('.')) {
@@ -175,7 +175,7 @@ screen.render();
 scan();
 
 function scan() {
-	glob(path.resolve(`${ceta.util.gameDir.replace(/^\\/, '/')}/Mods/**/{,.}*[!.]/manifest.json`), {strict: false, silent: true, nodir: true}, (err, paths) => {
+	glob(path.resolve(`${ceta.util.gameDir.replace(/^\\/, '/').replace('~', process.env.HOME)}/Mods/**/{,.}*[!.]/manifest.json`), {strict: false, silent: true, nodir: true}, (err, paths) => {
 		for (let manifestpath of paths) {
 			const regex = /^(.*[\\\/])(.*)$/;
 			const match = regex.exec(manifestpath);
@@ -192,7 +192,7 @@ function scan() {
 				path: match[1],
 				folderName: modfolder
 			});
-			modlist.add(`${scannedMods.get(manifest.UniqueID).disabled ? '[-] ' : ''}${manifest.Name}`)		
+			modlist.add(`${scannedMods.get(manifest.UniqueID).disabled ? '[-] ' : ''}${manifest.Name}`)
 		}
 		screen.render()
 	});

@@ -109,6 +109,7 @@ Created by: TorchedSammy
 menu.on('highlight', (_, n) => {
 	infotext.setContent(ceta.util.infoText(infotexts[n]))
 });
+
 menu.on('select', (i) => {
 	switch(i.content) {
 		case 'Manage Mods':
