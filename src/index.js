@@ -30,7 +30,7 @@ const infotexts = [
 
 const menu = blessed.list({
 	parent: screen,
-	top: `75%-${menuItems.length}`,
+	top: `80%-${menuItems.length}`,
 	left: `center`,
 	width: '15%',
 	keys: true,
@@ -49,15 +49,15 @@ const menu = blessed.list({
 
 const name = blessed.text({
 	parent: screen,
-	top: 17,
-	left: 'center',
+	top: '94%',
+	left: '1%',
 	content: 'Ceta'
 });
 
 const version = blessed.text({
 	parent: screen,
-	top: 18,
-	left: 'center',
+	top: '96%',
+	left: '1%',
 	content: `Version ${ceta.util.version}`
 });
 
