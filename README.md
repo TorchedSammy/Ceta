@@ -12,7 +12,6 @@ Features (Future and Now):
 - Launch with different sets of mods
 
 # Screenshots
-<img src='https://modeus.is-inside.me/idJTvaeX.png' width='512'>
 <img src='https://modeus.is-inside.me/W2elqPbm.png' width='512'>
 <img src='https://modeus.is-inside.me/3Id9hJ2T.png' width='512'>
 
