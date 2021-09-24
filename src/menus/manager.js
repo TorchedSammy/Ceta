@@ -144,12 +144,12 @@ screen.key(['escape'], () => {
 			modlist.items[modlist.selected].content = `[-] ${modlist.items[modlist.selected].content}`;
 			modmap.folderName = `.${mod.folderName}`;
 			modmap.path = path.join(path.join(ceta.util.gameDir(), 'Mods'), mod.folderName);
-			modmap.disabled = true
+			modmap.disabled = true;
 		} catch(e) {
-			screen.debug(e.message)
+			screen.debug(e.message);
 		}
 
-			screen.debug('disabling')
+			screen.debug('disabling');
 		}
 		if (!btndisabled && mod.disabled && mod.folderName.startsWith('.')) {
 			try {
@@ -159,9 +159,9 @@ screen.key(['escape'], () => {
 			modmap.path = path.join(path.join(ceta.util.gameDir(), 'Mods'), mod.folderName)
 			modmap.disabled = false
 			} catch(e) {
-			screen.debug(e.message)
+			screen.debug(e.message);
 		}
-			screen.debug('enabling')
+			screen.debug('enabling');
 		}
 	}
 
@@ -182,7 +182,7 @@ function scan() {
 			const modfolder = regex.exec(match[1].substring(0, match[1].length -1))[2]
 
 			const manifestfile = fs.readFileSync(manifestpath, 'utf8');
-			const manifest = json5.parse(manifestfile)
+			const manifest = json5.parse(manifestfile);
 
 			scannedMods.set(manifest.UniqueID, {
 				name: manifest.Name,
@@ -192,8 +192,8 @@ function scan() {
 				path: match[1],
 				folderName: modfolder
 			});
-			modlist.add(`${scannedMods.get(manifest.UniqueID).disabled ? '[-] ' : ''}${manifest.Name}`)
+			modlist.add(`${scannedMods.get(manifest.UniqueID).disabled ? '[-] ' : ''}${manifest.Name}`);
 		}
-		screen.render()
+		screen.render();
 	});
 }
