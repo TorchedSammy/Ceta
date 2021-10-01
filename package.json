@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/TorchedSammy/Ceta#readme",
   "dependencies": {
-    "blessed": "github:Hilbis/blessed",
+    "blessed": "github:Rosettea/blessed",
     "glob": "^7.1.6",
     "json5": "^2.2.0"
   }
